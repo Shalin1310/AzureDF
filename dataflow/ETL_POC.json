@@ -1,0 +1,51 @@
+{
+	"name": "ETL_POC",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"linkedService": {
+						"referenceName": "azure_storage_blob",
+						"type": "LinkedServiceReference"
+					},
+					"name": "inputfact"
+				},
+				{
+					"linkedService": {
+						"referenceName": "azure_storage_blob",
+						"type": "LinkedServiceReference"
+					},
+					"name": "exchangeInput"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "AzureSqlTable1",
+						"type": "DatasetReference"
+					},
+					"name": "sink"
+				}
+			],
+			"transformations": [
+				{
+					"name": "DerivedColumn"
+				},
+				{
+					"name": "Select"
+				},
+				{
+					"name": "Join1"
+				},
+				{
+					"name": "finalselection"
+				},
+				{
+					"name": "DerivedColumn1"
+				}
+			],
+			"script": "source(output(\n\t\tInvoice as string,\n\t\t{Line no} as string,\n\t\tcust_id as string,\n\t\tPrd_id as string,\n\t\tSales as string,\n\t\tExc_Src_USD_id as string,\n\t\tInvoice_dt as string,\n\t\tCurr_SRC_USD as string\n\t),\n\tallowSchemaDrift: false,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false,\n\tformat: 'delimited',\n\tcontainer: 'firstcontainer',\n\tfileName: 'Fact.csv',\n\tcolumnDelimiter: ',',\n\tescapeChar: '\\\\',\n\tqutoChar: '\\\"',\n\tcolumnNamesAsHeader: true,\n\tpartitionBy('hash', 1)) ~> inputfact\nsource(output(\n\t\tSuro_Key as string,\n\t\tFrom_Curr as string,\n\t\tTo_Curr as string,\n\t\tRate as string,\n\t\tStart_dt as string,\n\t\tEnd_dt as string,\n\t\tCurr_active as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false,\n\tformat: 'delimited',\n\tcontainer: 'firstcontainer',\n\tfileName: 'exchange.tsv',\n\tcolumnDelimiter: '\\t',\n\tescapeChar: '\\\\',\n\tqutoChar: '\\\"',\n\tcolumnNamesAsHeader: true) ~> exchangeInput\ninputfact derive(Invoice_Trimmed_Column = trim(Invoice,' '),\n\tpartitionBy('hash', 1)) ~> DerivedColumn\nDerivedColumn select(mapColumn(\n\t\tInvoice = Invoice_Trimmed_Column,\n\t\t{Line no},\n\t\tcust_id,\n\t\tPrd_id,\n\t\tSales,\n\t\tExc_Src_USD_id,\n\t\tInvoice_dt,\n\t\tCurr_SRC_USD\n\t),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> Select\nSelect, exchangeInput join(Exc_Src_USD_id == Suro_Key,\n\tjoinType:'inner',\n\tpartitionBy('hash', 1),\n\tbroadcast: 'auto')~> Join1\nJoin1 select(mapColumn(\n\t\tInvoice,\n\t\t{Line no},\n\t\tcust_id,\n\t\tPrd_id,\n\t\tSales,\n\t\tExc_Src_USD_id,\n\t\tInvoice_dt,\n\t\tCurr_SRC_USD,\n\t\tFrom_Curr\n\t),\n\tpartitionBy('hash', 1),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> finalselection\nfinalselection derive(cust_id = toInteger(cust_id)) ~> DerivedColumn1\nDerivedColumn1 sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tdeletable:false,\n\tinsertable:true,\n\tupdateable:false,\n\tupsertable:false,\n\trecreate:true,\n\tformat: 'table',\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\tsaveOrder: 1,\n\terrorHandlingOption: 'stopOnFirstError') ~> sink"
+		}
+	}
+}

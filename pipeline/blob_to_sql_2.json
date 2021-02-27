@@ -1,0 +1,161 @@
+{
+	"name": "blob_to_sql_2",
+	"properties": {
+		"activities": [
+			{
+				"name": "copy_blob_to_sql_tsv",
+				"type": "Copy",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "DelimitedTextSource",
+						"storeSettings": {
+							"type": "AzureBlobStorageReadSettings",
+							"recursive": true,
+							"enablePartitionDiscovery": false
+						},
+						"formatSettings": {
+							"type": "DelimitedTextReadSettings"
+						}
+					},
+					"sink": {
+						"type": "SqlServerSink"
+					},
+					"enableStaging": false,
+					"translator": {
+						"type": "TabularTranslator",
+						"mappings": [
+							{
+								"source": {
+									"name": "Invoice",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Invoice",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Line no",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Line no",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "cust_id",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "cust_id",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Prd_id",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Prd_id",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Sales",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Sales",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Exc_Src_USD_id",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Exc_Src_USD_id",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Invoice_dt",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Invoice_dt",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Curr_SRC_USD",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Curr_SRC_USD",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							}
+						],
+						"typeConversion": true,
+						"typeConversionSettings": {
+							"allowDataTruncation": true,
+							"treatBooleanAsNumber": false
+						}
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "ds_blob_fact_tsv",
+						"type": "DatasetReference"
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "SqlServerTable1",
+						"type": "DatasetReference"
+					}
+				]
+			}
+		],
+		"folder": {
+			"name": "Testing 1"
+		},
+		"annotations": [],
+		"lastPublishTime": "2021-02-25T12:32:40Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

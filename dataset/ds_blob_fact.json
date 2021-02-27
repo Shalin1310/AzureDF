@@ -1,0 +1,34 @@
+{
+	"name": "ds_blob_fact",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "azure_storage_blob",
+			"type": "LinkedServiceReference"
+		},
+		"parameters": {
+			"filename_DS": {
+				"type": "string",
+				"defaultValue": "Fact.csv"
+			}
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"fileName": {
+					"value": "@dataset().filename_DS",
+					"type": "Expression"
+				},
+				"container": "firstcontainer"
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"nullValue": "NULL",
+			"quoteChar": ""
+		},
+		"schema": []
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

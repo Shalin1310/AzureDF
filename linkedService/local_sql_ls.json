@@ -1,0 +1,16 @@
+{
+	"name": "local_sql_ls",
+	"type": "Microsoft.DataFactory/factories/linkedservices",
+	"properties": {
+		"annotations": [],
+		"type": "SqlServer",
+		"typeProperties": {
+			"connectionString": "integrated security=False;data source=LAPTOP-3DFR4KI6\\SQLDEVELOPER;initial catalog=SSIS_DEMO;user id=Shalin_SSIS_DEMO",
+			"encryptedCredential": "eyJDcmVkZW50aWFsSWQiOiJiMWQ0OTRjNy1jM2UwLTQyYjEtYWVhMC1jNGI0ZWQzNmNlYjAiLCJWZXJzaW9uIjoiMi4wIiwiQ2xhc3NUeXBlIjoiTWljcm9zb2Z0LkRhdGFQcm94eS5Db3JlLkludGVyU2VydmljZURhdGFDb250cmFjdC5DcmVkZW50aWFsU1UwNkNZMTQifQ=="
+		},
+		"connectVia": {
+			"referenceName": "localselfhosted",
+			"type": "IntegrationRuntimeReference"
+		}
+	}
+}

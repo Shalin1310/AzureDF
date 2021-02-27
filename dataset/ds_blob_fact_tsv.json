@@ -1,0 +1,30 @@
+{
+	"name": "ds_blob_fact_tsv",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "azure_storage_blob",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"fileName": "fact2.tsv",
+				"container": "firstcontainer"
+			},
+			"columnDelimiter": "|",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"nullValue": "null",
+			"quoteChar": "\""
+		},
+		"schema": [
+			{
+				"name": "Invoice|Line no|cust_id|Prd_id|Sales|Exc_Src_USD_id|Invoice_dt|Curr_SRC_USD",
+				"type": "String"
+			}
+		]
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

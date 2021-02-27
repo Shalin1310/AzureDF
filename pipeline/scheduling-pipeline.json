@@ -1,0 +1,58 @@
+{
+	"name": "scheduling-pipeline",
+	"properties": {
+		"activities": [
+			{
+				"name": "blob_to_sql_csv",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "blob_to_sql",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": false,
+					"parameters": {
+						"filename": {
+							"value": "@pipeline().parameters.filename_scheduler",
+							"type": "Expression"
+						}
+					}
+				}
+			},
+			{
+				"name": "blob_to_sql_tsv",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "blob_to_sql_csv",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "blob_to_sql_2",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true
+				}
+			}
+		],
+		"parameters": {
+			"filename_scheduler": {
+				"type": "string",
+				"defaultValue": "xx.csv"
+			}
+		},
+		"folder": {
+			"name": "Scheduler"
+		},
+		"annotations": [],
+		"lastPublishTime": "2021-02-25T13:06:47Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}
