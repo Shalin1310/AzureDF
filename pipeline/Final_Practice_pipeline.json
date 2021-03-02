@@ -1,0 +1,159 @@
+{
+	"name": "Final_Practice_pipeline",
+	"properties": {
+		"activities": [
+			{
+				"name": "from blob to local sql",
+				"type": "Copy",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "DelimitedTextSource",
+						"storeSettings": {
+							"type": "AzureBlobStorageReadSettings",
+							"recursive": true,
+							"enablePartitionDiscovery": false
+						},
+						"formatSettings": {
+							"type": "DelimitedTextReadSettings"
+						}
+					},
+					"sink": {
+						"type": "AzureSqlSink"
+					},
+					"enableStaging": false,
+					"translator": {
+						"type": "TabularTranslator",
+						"mappings": [
+							{
+								"source": {
+									"name": "Invoice",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Invoice",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Line no",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Line no",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "cust_id",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "cust_id",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Prd_id",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Prd_id",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Sales",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Sales",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Exc_Src_USD_id",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Exc_Src_USD_id",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Invoice_dt",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Invoice_dt",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Curr_SRC_USD",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Curr_SRC_USD",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							}
+						],
+						"typeConversion": true,
+						"typeConversionSettings": {
+							"allowDataTruncation": true,
+							"treatBooleanAsNumber": false
+						}
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "ds_blob_fact",
+						"type": "DatasetReference",
+						"parameters": {
+							"filename_DS": "Fact.csv"
+						}
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "AzureSqlTable1",
+						"type": "DatasetReference"
+					}
+				]
+			}
+		],
+		"annotations": []
+	}
+}
