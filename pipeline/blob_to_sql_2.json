@@ -145,7 +145,7 @@
 				],
 				"outputs": [
 					{
-						"referenceName": "SqlServerTable1",
+						"referenceName": "Local_SqlServerTable1",
 						"type": "DatasetReference"
 					}
 				]
