@@ -1,5 +1,5 @@
 {
-	"name": "SqlServerTable1",
+	"name": "Local_SqlServerTable1",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "local_sql_ls",
